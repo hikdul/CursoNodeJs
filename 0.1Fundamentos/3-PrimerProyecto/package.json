@@ -1,0 +1,16 @@
+{
+  "name": "3-primerproyecto",
+  "version": "1.0.0",
+  "description": "usando el npm init, cxreando app de linea de comando",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hector Contreras",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "yargs": "^16.0.3"
+  },
+  "devDependencies": {}
+}
