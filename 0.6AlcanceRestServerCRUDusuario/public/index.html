@@ -49,7 +49,7 @@
 
             // asi obtengo el token de google
             let token = googleUser.getAuthResponse().id_token;
-            // console.log(token);
+            console.log(token);
             // y asi envio informacion
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/google');
