@@ -54,3 +54,10 @@ process.env.SEED = process.env.SEED || "process.env.SEED-llave-expuesta";
 
 
 process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 7;
+
+// ============================
+//  Cliend Id para google SingIn
+// ============================
+
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || '614776848556-387tb4rccoaighqrnl595kn9v5d83t9e.apps.googleusercontent.com';

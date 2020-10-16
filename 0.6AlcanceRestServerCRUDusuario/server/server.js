@@ -8,6 +8,23 @@ const mongoose = require('mongoose');
 const app = express();
 
 const bodyParser = require('body-parser');
+
+
+// =============================
+// Habilitar mi carpeta publlic
+// =============================
+
+// esta linea deberia de ir arriba pero para mantener la idea de su uso la coloco aqui
+
+const path = require('path');
+// ya que literal este paquete que viene en node js me resuelve todo  por medio de sus sintasis
+
+app.use(express.static(path.resolve(__dirname, '../public')));
+
+
+
+// =============================
+
 // asi llamamos a los required de usuario
 // app.use(require('./routes/usuario'));
 // este se cambia por una ruta con todas las salidas y entradas de usuario
