@@ -18,6 +18,10 @@ const Usuario = require('../models/usuario');
 // y si asi es el estandar de la libreria
 const _ = require("underscore");
 
+// para traer nuestro middleware de autenticacon
+
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+
 
 
 
@@ -25,7 +29,7 @@ const _ = require("underscore");
 //  GET
 // =========================
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken, (req, res) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -62,7 +66,7 @@ app.get('/usuario', function(req, res) {
 //  POST
 // =========================
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let body = req.body;
 
@@ -99,7 +103,7 @@ app.post('/usuario', function(req, res) {
 // PUT
 // ================================
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
     let body = req.body;
@@ -167,7 +171,7 @@ app.put('/usuario/:id', function(req, res) {
 
 // la anterior de comenta para dejarlo como ejemplo al final utilizaremos esta
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     let id = req.params.id;
     let CambiaEstado = {
         estado: false

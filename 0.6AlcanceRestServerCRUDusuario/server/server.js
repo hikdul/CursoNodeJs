@@ -9,8 +9,9 @@ const app = express();
 
 const bodyParser = require('body-parser');
 // asi llamamos a los required de usuario
-
-app.use(require('./routes/usuario'));
+// app.use(require('./routes/usuario'));
+// este se cambia por una ruta con todas las salidas y entradas de usuario
+app.use(require('./routes/index'));
 
 
 // parse application/x-www-form-urlencoded

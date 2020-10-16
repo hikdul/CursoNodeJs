@@ -37,3 +37,20 @@ if (process.env.NODE_ENV === 'dev') {
 }
 //esta variable como tal no existe pero la uso para identificar mi cadena de coneccion
 process.env.DATA_BASE = urlBD;
+
+
+
+// ============================
+//  semilla secreta para disponer de nuestro jwt
+// ============================
+
+process.env.SEED = process.env.SEED || "process.env.SEED-llave-expuesta";
+
+
+// =============================
+// tiempo de expiracion de los tokens 
+// 1 semana segun este "algotirmo"
+// =============================
+
+
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 7;
