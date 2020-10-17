@@ -5,5 +5,8 @@ textos/
 
 node_modules/
 
-UP/
+UP/producto/
+UP/usuario/
+
+tmp/
 
