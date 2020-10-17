@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
 
 let Schema = mongoose.Schema;
+
 const rolesValidos = {
     values: ['ADMIN_ROLE', 'USER_ROLE'],
     message: '{VALUE} no es un rol valido'
@@ -62,4 +63,4 @@ usuarioSchema.methods.toJSON = function() {
 usuarioSchema, mongoose.plugin(unique, { message: '{PATH} usuario ya registrado' });
 
 // asi lo esportamos hacia la base de datos
-module.exports = mongoose.model('Usaurio', usuarioSchema);
+module.exports = mongoose.model('Usuario', usuarioSchema);

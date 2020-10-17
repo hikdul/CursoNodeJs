@@ -50,10 +50,13 @@ process.env.SEED = process.env.SEED || "process.env.SEED-llave-expuesta";
 // =============================
 // tiempo de expiracion de los tokens 
 // 1 semana segun este "algotirmo"
+// lo are de 24 horas
 // =============================
 
 
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 7;
+// process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 7;
+process.env.CADUCIDAD_TOKEN = '24h';
+
 
 // ============================
 //  Cliend Id para google SingIn
