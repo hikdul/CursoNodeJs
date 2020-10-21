@@ -1,12 +1,20 @@
-const express = require('express');
-const fileUpload = require('express-fileupload');
-const app = express();
+const express = require('express')
+const fileUpload = require('express-fileupload')
+const app = express()
 
 // default options => middleware
-app.use(fileUpload({ useTempFiles: true }));
-// =>NOTA: este middlewaare hace que todo lo que se carge se ingrese a req.files OJO
+app.use(fileUpload({ useTempFiles: true }))
+    // =>NOTA: este middlewaare hace que todo lo que se carge se ingrese a req.files OJO
 
+// para poder usar mi datos de usuario o de producto los importo
+const Usuario = require('./usuario')
+const Producto = require('./Producto')
+const usuario = require('../models/usuario')
 
+// con este accedemos al file sistem y asi poder verificar is existe o no un archivo
+const fs = require('fs')
+    // este es para contruir rutas a partir del path
+const path = require('path')
 
 // aqui es indiferente el uso que default es post
 // en el caso de este usaremos put pues bien sabemos que es para actuañizar la fotografia de los usuarios
@@ -52,6 +60,7 @@ app.put('/upload/:tipo/:id', (req, res) => {
 
     // validando tipo ################
     let tipoV = ['usuario', 'producto']
+
     if (tipoV.indexOf(tipo) < 0)
         return res.status(405).json({
             ok: false,
@@ -74,19 +83,93 @@ app.put('/upload/:tipo/:id', (req, res) => {
     // archivo.mv('UP/archivo.png', err => {
     // asi colocamos el nombre del archivo como viene por defecto
     archivo.mv(`UP/${tipo}/${nvoNombre}`, err => {
-        if (err)
+        if (err) {
+            borraImg(nvoNombre, tipo)
             return res.status(500).json({
                 ok: false,
                 err
             })
+        }
 
-        return res.json({
-            ok: true,
-            message: 'archivo subido'
-        })
+        // aqui ya la imagen esta lista para usarla
+        switch (tipo) {
+            case 'usuario':
+                imagenUsr(id, res, nvoNombre, tipo)
+                break
+            case 'producto':
+                imagenProducto()
+                break
+            default:
+                borraImg(nvoNombre, tipo)
+                break;
+        }
     });
 
 })
 
+// aqui vamos a usar las imagenes
+function imagenUsr(id, res, nombreArch, tipo) {
+
+    usuario.findById(id, (err, usrBd) => {
+
+        if (err) {
+            borraImg(nombreArch, tipo)
+            return res.status(500).json({
+
+                ok: false,
+                err: {
+                    message: 'Error interno o datos suministrados no validos'
+                }
+            })
+        }
+        if (!usrBd) {
+            borraImg(nombreArch, tipo)
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'el usuario no existe'
+                }
+            })
+        }
+
+
+        borraImg(usrBd.img, tipo)
+
+        // let pathImagen = path.resolve(__dirname, `../../UP/usuario/${usrBd.img}`)
+
+        // if (fs.existsSync(pathImagen))
+        //     fs.unlinkSync(pathImagen)
+
+        usrBd.img = nombreArch
+
+        usrBd.save((err, usrSave) => {
+            if (err)
+                return res.status(500).json({
+                    ok: false,
+                    err
+                })
+            return res.json({
+                ok: true,
+                usuario: usrSave,
+                img: nombreArch
+            })
+        })
+
+    })
+
+}
+
+function imagenProducto() {
+
+}
+
+
+const borraImg = (nombreImagen, dirTipo) => {
+
+    let pathImagen = path.resolve(__dirname, `../../UP/${dirTipo}/${nombreImagen}`)
+    if (fs.existsSync(pathImagen))
+        fs.unlinkSync(pathImagen)
+
+}
 
 module.exports = app
