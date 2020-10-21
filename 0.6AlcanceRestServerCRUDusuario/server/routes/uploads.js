@@ -7,9 +7,8 @@ app.use(fileUpload({ useTempFiles: true }))
     // =>NOTA: este middlewaare hace que todo lo que se carge se ingrese a req.files OJO
 
 // para poder usar mi datos de usuario o de producto los importo
-const Usuario = require('./usuario')
-const Producto = require('./Producto')
 const usuario = require('../models/usuario')
+const producto = require('../models/producto')
 
 // con este accedemos al file sistem y asi poder verificar is existe o no un archivo
 const fs = require('fs')
@@ -97,7 +96,7 @@ app.put('/upload/:tipo/:id', (req, res) => {
                 imagenUsr(id, res, nvoNombre, tipo)
                 break
             case 'producto':
-                imagenProducto()
+                imagenProducto(id, res, nvoNombre, tipo)
                 break
             default:
                 borraImg(nvoNombre, tipo)
@@ -159,7 +158,50 @@ function imagenUsr(id, res, nombreArch, tipo) {
 
 }
 
-function imagenProducto() {
+function imagenProducto(id, res, nombreArch, tipo) {
+
+    producto.findById(id, (err, prodBd) => {
+
+        if (err) {
+            borraImg(nombreArch, tipo)
+            return res.status(500).json({
+
+                ok: false,
+                err: {
+                    message: 'Error interno o datos suministrados no validos'
+                }
+            })
+        }
+        if (!prodBd) {
+            borraImg(nombreArch, tipo)
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'producto no registrado'
+                }
+            })
+        }
+
+
+        borraImg(prodBd.img, tipo)
+
+
+        prodBd.img = nombreArch
+
+        prodBd.save((err, prodSave) => {
+            if (err)
+                return res.status(500).json({
+                    ok: false,
+                    err
+                })
+            return res.json({
+                ok: true,
+                producto: prodSave,
+                img: nombreArch
+            })
+        })
+
+    })
 
 }
 

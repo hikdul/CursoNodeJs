@@ -7,6 +7,7 @@ app.use(require('./login'));
 app.use(require('./categorias'));
 app.use(require('./Producto'));
 app.use(require('./uploads'));
+app.use(require('./imagenes'));
 
 
 
